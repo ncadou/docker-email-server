@@ -1,0 +1,4 @@
+docker_username: ncadou
+docker_base_image: ubuntu
+docker_context: /tmp/docker-install
+docker_prepared_base: ${docker_username}/base-${docker_base_image}

@@ -1,0 +1,5 @@
+- name: Configure hostname to ${inventory_hostname}
+  lineinfile: dest=/etc/hostname line=${inventory_hostname} regexp=. state=present
+  # notify: Activate hostname
+  tags:
+    - hostname

@@ -1,0 +1,11 @@
+locale: en_US.UTF-8
+timezone: Canada/Eastern
+ssh_key_file: ~/.ssh/id_rsa.pub
+sysadmin: postmaster@example.com
+open_ports: 22
+
+vmail_user: vmail
+vmail_uid: 150
+vmail_group: mail
+vmail_gid: 8
+vmail_dir: /var/vmail

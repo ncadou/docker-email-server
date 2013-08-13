@@ -1,0 +1,72 @@
+- name: Install SQL auth dovecot configuration file
+  copy: src=templates/dovecot/auth-sql.conf.ext dest=/etc/dovecot/conf.d
+
+- name: Set dovecot driver for SQL auth to sqlite
+  lineinfile: dest=/etc/dovecot/dovecot-sql.conf.ext regexp='driver\s*='
+              line='driver = sqlite' state=present
+
+- name: Set dovecot connection args for SQL auth DB
+  lineinfile: dest=/etc/dovecot/dovecot-sql.conf.ext regexp='connect\s*='
+              line='connect = ${vmail_dir}/authdb.sqlite' state=present
+
+- name: Set dovecot SQL auth password scheme
+  lineinfile: dest=/etc/dovecot/dovecot-sql.conf.ext regexp='default_pass_scheme\s*='
+              line='default_pass_scheme = MD5-CRYPT' state=present
+
+- name: Configure dovecot SQL queries
+  template: src=templates/dovecot/dovecot-sqlite.conf.ext
+            dest=/etc/dovecot/dovecot-sqlite.conf.ext
+
+- name: Wire in configuration for dovecot SQL queries
+  lineinfile: dest=/etc/dovecot/dovecot-sql.conf.ext regexp='dovecot-sqlite'
+              line='!include dovecot-sqlite.conf.ext' state=present
+
+- name: Disable dovecot plain text auth
+  lineinfile: dest=/etc/dovecot/conf.d/10-auth.conf regexp='disable_plaintext_auth\s*='
+              line='disable_plaintext_auth = yes' state=present
+
+- name: Configure dovecot auth mechanisms
+  lineinfile: dest=/etc/dovecot/conf.d/10-auth.conf regexp='auth_mechanisms\s*='
+              line='auth_mechanisms = plain login' state=present
+
+- name: Deactivate dovecot system auth
+  lineinfile: dest=/etc/dovecot/conf.d/10-auth.conf regexp='^([^#].* auth-system\..*)$'
+              line='#\1' backrefs=yes state=present
+
+- name: Activate dovecot SQL auth
+  lineinfile: dest=/etc/dovecot/conf.d/10-auth.conf regexp='^#(.* auth-sql\..*)$'
+              line='\1' backrefs=yes state=present
+
+- name: Set dovecot mail location
+  lineinfile: dest=/etc/dovecot/conf.d/10-mail.conf regexp='mail_location\s*='
+              line='mail_location = maildir:${vmail_dir}/mail/%d/%n' state=present
+
+- name: Set dovecot mail user
+  lineinfile: dest=/etc/dovecot/conf.d/10-mail.conf regexp='mail_uid\s*='
+              line='mail_uid = ${vmail_user}' state=present
+
+- name: Set dovecot mail group
+  lineinfile: dest=/etc/dovecot/conf.d/10-mail.conf regexp='mail_gid\s*='
+              line='mail_gid = ${vmail_group}' state=present
+
+- name: Set dovecot mail uid
+  lineinfile: dest=/etc/dovecot/conf.d/10-mail.conf regexp='${item}_valid_uid\s*='
+              line='${item}_valid_uid = ${vmail_uid}' state=present
+  with_items:
+    - first
+    - last
+
+- name: Activate dovecot SSH/TLS support
+  lineinfile: dest=/etc/dovecot/conf.d/10-ssl.conf regexp='ssl\s*='
+              line='ssl = yes' state=present
+
+- name: Change dovecot configuration files permissions
+  file: path=/etc/dovecot owner=${vmail_user} group=dovecot mode=640
+        recurse=yes state=directory
+
+- name: Change dovecot configuration directories permissions
+  file: path=/etc/dovecot/${item} owner=${vmail_user} group=dovecot mode=750
+        state=directory
+  with_items:
+    - .
+    - conf.d

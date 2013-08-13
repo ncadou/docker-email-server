@@ -1,0 +1,13 @@
+- hosts: all
+  user: root
+  vars_files:
+    - vars/defaults.yml
+    - vars/docker.yml
+  tasks:
+    - include: tasks/system.yml
+    - include: tasks/locale.yml
+    - include: tasks/packages.yml
+    - include: tasks/users.yml
+    - include: tasks/dovecot.yml
+  handlers:
+    - include: handlers/handlers.yml

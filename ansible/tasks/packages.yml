@@ -1,0 +1,17 @@
+- name: Install essential packages
+  apt: pkg=${item} state=installed
+  with_items:
+    - bcrypt
+    - dovecot-imapd
+    - dovecot-managesieved
+    - dovecot-pop3d
+    - dovecot-sieve
+    - dovecot-sqlite
+    - htop
+    - logrotate
+    # - mail-server^  # Ansible fails on that one.
+    - moreutils
+    - openssh-server
+    - postfix
+    - postgrey
+    - tree

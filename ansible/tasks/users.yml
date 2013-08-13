@@ -1,0 +1,7 @@
+- name: Add user for virtual maildirs
+  user: name=${vmail_user} group=${vmail_group} home=${vmail_dir} uid=${vmail_uid}
+        shell=/sbin/nologin comment="Virtual maildir handler" system=yes
+        state=present
+
+- name: Set virtual maildirs permissions
+  file: path=${vmail_dir} group=${vmail_group} mode=770 state=directory

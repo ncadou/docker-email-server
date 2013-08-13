@@ -1,0 +1,6 @@
+- name: Activate hostname
+  command: hostname --file /etc/hostname
+  when: RELOAD_HOSTNAME is defined
+
+- name: Update tzdata
+  command: /usr/sbin/dpkg-reconfigure --frontend noninteractive tzdata

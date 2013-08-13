@@ -1,0 +1,15 @@
+- name: Configure locale to ${locale}
+  shell: /usr/sbin/locale-gen "${locale}" && /usr/sbin/update-locale LANG="${locale}" LC_ALL="${locale}"
+  tags:
+    - locale
+
+- name: Set /etc/localtime to ${timezone}
+  command: /bin/cp /usr/share/zoneinfo/${timezone} /etc/localtime
+  tags:
+    - locale
+
+- name: Set /etc/timezone to ${timezone}
+  template: src=templates/timezone dest=/etc/timezone
+  # notify: Update tzdata
+  tags:
+    - locale
