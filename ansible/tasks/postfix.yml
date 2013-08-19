@@ -1,0 +1,11 @@
+- name: Install postfix config files
+  template: src='templates/postfix/${item}' dest=/etc/postfix
+  with_items:
+    - header-checks
+    - main.cf
+    - master.cf
+    - ${db_backend}/sql-virtual-alias-domainaliases-maps.cf
+    - ${db_backend}/sql-virtual-alias-maps.cf
+    - ${db_backend}/sql-virtual-domains-maps.cf
+    - ${db_backend}/sql-virtual-mailbox-domainaliases-maps.cf
+    - ${db_backend}/sql-virtual-mailbox-maps.cf

@@ -1,0 +1,5 @@
+dbpath = ${vmail_dir}/authdb.sqlite
+table = alias
+select_field = goto
+where_field = address
+additional_conditions = and active = '1'
