@@ -4,22 +4,26 @@
 FROM ncadou/ansible
 MAINTAINER Nicolas Cadou <ncadou@cadou.ca>
 
+ENV DEBIAN_FRONTEND noninteractive
+
 ENV VMAIL_USER vmail
 ENV VMAIL_UID 150
 ENV VMAIL_GROUP mail
 ENV VMAIL_GID 8
 ENV VMAIL_DIR /var/vmail
 
-ENV DEBIAN_FRONTEND noninteractive
-
-RUN apt-get install -y bcrypt dovecot-imapd dovecot-managesieved dovecot-pop3d dovecot-sieve dovecot-sqlite htop logrotate mail-server^ moreutils openssh-server postfix postgrey tree && apt-get clean
+RUN apt-get install -y bcrypt dovecot-imapd dovecot-managesieved dovecot-pop3d dovecot-sieve dovecot-sqlite logrotate mail-server^ openssh-server postfix postgrey && apt-get clean
 
 RUN mkdir /var/run/sshd
+# Temporarily during development:
 RUN echo root:root | chpasswd
+
+RUN apt-get install -y curl git subversion nginx php5-cli php5-fpm php5-sqlite && apt-get clean
+
+ENV VIMBADMIN_VER 2.2.2
 
 ADD ansible /.ansible
 
-RUN env
-RUN cd /.ansible; ansible-playbook -i hosts -c local setup-base.yml -e "vmail_user=$VMAIL_USER" -e "vmail_uid=$VMAIL_UID" -e "vmail_group=$VMAIL_GROUP" -e "vmail_gid=$VMAIL_GID" -e "vmail_dir=$VMAIL_DIR"
+RUN cd /.ansible; ansible-playbook -i hosts -c local setup-base.yml -e "vmail_user=$VMAIL_USER" -e "vmail_uid=$VMAIL_UID" -e "vmail_group=$VMAIL_GROUP" -e "vmail_gid=$VMAIL_GID" -e "vmail_dir=$VMAIL_DIR" -e "vimbadmin_ver=$VIMBADMIN_VER"
 
-EXPOSE 22
+EXPOSE 22 80

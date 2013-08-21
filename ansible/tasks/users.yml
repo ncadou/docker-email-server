@@ -5,3 +5,6 @@
 
 - name: Set virtual maildirs permissions
   file: path=${vmail_dir} group=${vmail_group} mode=770 state=directory
+
+- name: Add www-data user to group mail
+  user: name=www-data groups=mail append=yes state=present

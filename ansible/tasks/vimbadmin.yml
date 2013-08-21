@@ -1,0 +1,63 @@
+- name: Download and extract ViMbAdmin
+  shell: curl http://cloud.github.com/downloads/opensolutions/ViMbAdmin/vimbadmin-${vimbadmin_ver}.tar.gz | tar -zxf - -C /usr/local
+         creates=/usr/local/vimbadmin-${vimbadmin_ver}
+  tags:
+    - vimbadmin
+
+- name: Link ViMbAdmin version
+  file: dest=/usr/local/vimbadmin
+        state=link src=/usr/local/vimbadmin-${vimbadmin_ver}
+  tags:
+    - vimbadmin
+
+- name: Install ViMbAdmin dependencies
+  command: ./bin/library-init.sh
+           chdir=/usr/local/vimbadmin creates=/usr/local/vimbadmin/library/Zend
+  tags:
+    - vimbadmin
+
+- name: Initialize ViMbAdmin configuration
+  command: cp application.ini.dist application.ini
+           chdir=/usr/local/vimbadmin/application/configs
+           creates=/usr/local/vimbadmin/application/configs/application.ini
+  tags:
+    - vimbadmin
+
+- name: Configure ViMbAdmin security salt
+  lineinfile: dest=/usr/local/vimbadmin/application/configs/application.ini
+              regexp='^.*(securitysalt).*$' backrefs=yes
+              line="\1 = \"123\""
+              state=present
+  tags:
+    - vimbadmin
+
+- name: Configure ViMbAdmin database
+  lineinfile: dest=/usr/local/vimbadmin/application/configs/application.ini
+              regexp='^.*(resources.doctrine.connection_string).*$' backrefs=yes
+              line="\1 = \"${db_backend}:///${vmail_dir}/authdb.sqlite\""
+              state=present
+  tags:
+    - vimbadmin
+
+- name: Ensure ViMbAdmin can write to its working directory
+  file: dest=/usr/local/vimbadmin/var owner=www-data recurse=yes state=directory
+  tags:
+    - vimbadmin
+
+- name: Set permissions on ViMbAdmin database directory
+  file: name=${vmail_dir} owner=vmail group=mail mode=770
+        state=directory
+  tags:
+    - vimbadmin
+
+- name: Initialize ViMbAdmin database
+  command: /usr/local/vimbadmin/bin/doctrine-cli.php create-tables
+           creates=${vmail_dir}/authdb.sqlite
+  tags:
+    - vimbadmin
+
+- name: Set permissions on ViMbAdmin database
+  file: name=${vmail_dir}/authdb.sqlite owner=vmail group=mail mode=660
+        state=file
+  tags:
+    - vimbadmin
