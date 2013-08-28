@@ -14,7 +14,8 @@ if [ ! -f $VMAIL_DIR/authdb.sqlite ]; then
     chmod 660 $VMAIL_DIR/authdb.sqlite
 fi
 
-service nginx start
+/usr/sbin/dovecot -c /etc/dovecot/dovecot.conf
 service php5-fpm start
+service nginx start
 
-sleep 86400  # FIXME: find a better way to keep the container alive.
+exec /usr/sbin/sshd -D
