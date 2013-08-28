@@ -16,13 +16,20 @@ fi
 
 echo "127.0.0.1 $(hostname) $(hostname -s)" >> /etc/hosts
 
+# Start system services.
 . /etc/default/rsyslog
 /usr/sbin/rsyslogd $RSYSLOGD_OPTIONS
 
+# Start email services.
 /usr/sbin/dovecot -c /etc/dovecot/dovecot.conf
+service postfix start
+
+# Start web services.
 service php5-fpm start
 service nginx start
 
-# The SSH init that we'll not be using would've created that directory.
+# Start sshd. The container will stay alive as long as the daemon runs.
+# The SSH upstart script that we can't use under docker would have created
+# that directory, so we have to do it manually.
 test -d /var/run/sshd || mkdir -p -m0755 /var/run/sshd
 exec /usr/sbin/sshd -D

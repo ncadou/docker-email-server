@@ -1,10 +1,21 @@
 # Dockerfile for building an email server.
 #
 
-FROM ncadou/ansible
+FROM dsissitka/raring
 MAINTAINER Nicolas Cadou <ncadou@cadou.ca>
 
 ENV DEBIAN_FRONTEND noninteractive
+
+RUN echo 'deb http://archive.ubuntu.com/ubuntu raring main universe' > /etc/apt/sources.list
+RUN apt-get update && apt-get upgrade -y && apt-get clean
+
+RUN apt-get install -y python-apt python-jinja2 python-paramiko python-pip python-yaml && apt-get clean
+RUN pip install ansible
+
+# Upstart doesn't work inside a docker container, so we deactivate it to work
+# around post-install scripts that want to talk to it.
+RUN dpkg-divert --local --rename --add /sbin/initctl
+RUN ln -s /bin/true /sbin/initctl
 
 ENV RANDOMIZE_PASSWORD 0
 ENV MAILNAME mailserver.local
