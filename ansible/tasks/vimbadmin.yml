@@ -39,6 +39,14 @@
   tags:
     - vimbadmin
 
+- name: Work around ViMbAdmin broken URL generation
+  lineinfile: dest=/usr/local/vimbadmin/library/ViMbAdmin/Smarty/functions/function.genUrl.php
+              regexp='URL work around' insertafter=getTemplateVars
+              line="        $url = ''; // URL work around"
+              state=present
+  tags:
+    - vimbadmin
+
 - name: Ensure ViMbAdmin can write to its working directory
   file: dest=/usr/local/vimbadmin/var owner=www-data recurse=yes state=directory
   tags:
@@ -60,4 +68,10 @@
   file: name=${vmail_dir}/authdb.sqlite
         owner=${vmail_user} group=${vmail_group} mode=660 state=file
   tags:
+    - vimbadmin
+
+- name: Configure nginx for ViMbAdmin
+  template: src=templates/nginx-vimbadmin dest=/etc/nginx/sites-enabled/vimbadmin
+  tags:
+    - nginx
     - vimbadmin

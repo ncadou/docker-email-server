@@ -1,0 +1,36 @@
+server {
+    root /usr/local/vimbadmin/public;
+    listen 80;
+    # listen [::]:80;
+    # listen [::]:443 ssl;
+    # ssl_certificate /etc/nginx/ssl/mirtouf.net.crt;
+    # ssl_certificate_key /etc/nginx/ssl/mirtouf.net.key;
+    server_name ${vimbadmin_hostname};
+    index index.php;
+
+    location ~ /\.ht {
+        deny  all;
+    }
+
+    location / {
+        if (!-f $request_filename) {
+            rewrite ^(.*)$ /index.php?q=$1 last;
+            break;
+        }
+    }
+
+    location ~* ^.+.(css|js|jpeg|jpg|gif|png|ico) {
+        expires 30d;
+    }
+
+    # enable php
+    location ~ \.php$ {
+        fastcgi_pass 127.0.0.1:9000;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        # fastcgi_param HTTPS on;
+        include fastcgi_params;
+        fastcgi_param SERVER_NAME $server_name;
+    }
+}
+
+

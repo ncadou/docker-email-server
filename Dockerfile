@@ -21,10 +21,11 @@ ENV VMAIL_GID 8
 ENV VMAIL_DIR /var/vmail
 ENV VIMBADMIN_SALT 123
 ENV VIMBADMIN_VER 2.2.2
+ENV VIMBADMIN_HOSTNAME localhost
 
 ADD ansible /.ansible
 
-RUN cd /.ansible; ansible-playbook -i hosts -c local setup-base.yml -e "vmail_user=$VMAIL_USER vmail_uid=$VMAIL_UID vmail_group=$VMAIL_GROUP vmail_gid=$VMAIL_GID vmail_dir=$VMAIL_DIR vimbadmin_ver=$VIMBADMIN_VER vimbadmin_salt=$VIMBADMIN_SALT"
+RUN cd /.ansible; ansible-playbook -i hosts -c local setup-base.yml -e "vmail_user=$VMAIL_USER vmail_uid=$VMAIL_UID vmail_group=$VMAIL_GROUP vmail_gid=$VMAIL_GID vmail_dir=$VMAIL_DIR vimbadmin_ver=$VIMBADMIN_VER vimbadmin_salt=$VIMBADMIN_SALT vimbadmin_hostname=$VIMBADMIN_HOSTNAME"
 
 EXPOSE 22 80
 VOLUME ["/var/vmail"]
