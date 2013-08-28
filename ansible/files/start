@@ -1,0 +1,15 @@
+#!/usr/bin/env sh
+
+chown $VMAIL_USER:$VMAIL_GROUP $VMAIL_DIR
+chmod 770 $VMAIL_DIR
+
+if [ ! -f $VMAIL_DIR/authdb.sqlite ]; then
+    /usr/local/vimbadmin/bin/doctrine-cli.php create-tables
+    chown $VMAIL_USER:$VMAIL_GROUP $VMAIL_DIR/authdb.sqlite
+    chmod 660 $VMAIL_DIR/authdb.sqlite
+fi
+
+service nginx start
+service php5-fpm start
+
+sleep 86400  # FIXME: find a better way to keep the container alive.

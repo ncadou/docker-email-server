@@ -11,5 +11,6 @@
     - include: tasks/dovecot.yml
     - include: tasks/postfix.yml
     - include: tasks/vimbadmin.yml
+    - include: tasks/startup.yml
   handlers:
     - include: handlers/handlers.yml

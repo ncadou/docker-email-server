@@ -1,0 +1,2 @@
+- name: Install startup script
+  copy: src=files/start dest=/start mode=755

@@ -45,8 +45,8 @@
     - vimbadmin
 
 - name: Set permissions on ViMbAdmin database directory
-  file: name=${vmail_dir} owner=vmail group=mail mode=770
-        state=directory
+  file: name=${vmail_dir}
+        owner=${vmail_user} group=${vmail_group} mode=770 state=directory
   tags:
     - vimbadmin
 
@@ -57,7 +57,7 @@
     - vimbadmin
 
 - name: Set permissions on ViMbAdmin database
-  file: name=${vmail_dir}/authdb.sqlite owner=vmail group=mail mode=660
-        state=file
+  file: name=${vmail_dir}/authdb.sqlite
+        owner=${vmail_user} group=${vmail_group} mode=660 state=file
   tags:
     - vimbadmin
