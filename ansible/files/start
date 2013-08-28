@@ -16,6 +16,9 @@ fi
 
 echo "127.0.0.1 $(hostname) $(hostname -s)" >> /etc/hosts
 
+. /etc/default/rsyslog
+/usr/sbin/rsyslogd $RSYSLOGD_OPTIONS
+
 /usr/sbin/dovecot -c /etc/dovecot/dovecot.conf
 service php5-fpm start
 service nginx start

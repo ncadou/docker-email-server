@@ -1,11 +1,12 @@
+default_pass_scheme = PLAIN-MD5
 # Define the query to obtain a user password.
 password_query = \
   SELECT username as user, password, '${vmail_dir}/mail/%d/%n' as userdb_home, \
-  'maildir:${vmail_dir}/mail/%d/%n' as userdb_mail, ${vmail_uid} as userdb_uid, ${vmail_group} as userdb_gid \
+  'maildir:${vmail_dir}/mail/%d/%n' as userdb_mail, ${vmail_uid} as userdb_uid, ${vmail_gid} as userdb_gid \
   FROM mailbox WHERE username = '%u' AND active = '1'
 
 # Define the query to obtain user information.
 user_query = \
   SELECT '${vmail_dir}/mail/%d/%n' as home, 'maildir:${vmail_dir}/mail/%d/%n' as mail, \
-  ${vmail_uid} AS uid, ${vmail_gid} AS gid, concat('dirsize:storage=', quota) AS quota \
+  ${vmail_uid} AS uid, ${vmail_gid} AS gid, 'dirsize:storage=' || quota AS quota \
   FROM mailbox WHERE username = '%u' AND active = '1'
