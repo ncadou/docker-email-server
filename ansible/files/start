@@ -1,9 +1,14 @@
 #!/usr/bin/env sh
 
-chown $VMAIL_USER:$VMAIL_GROUP $VMAIL_DIR
-chmod 770 $VMAIL_DIR
+if [ "_$RANDOMIZE_PASSWORD" = "_1" ]; then
+    ROOT_PASSWORD=`pwgen -c -n -1 12`
+    echo Password: $ROOT_PASSWORD
+    echo "root:$ROOT_PASSWORD" | chpasswd
+fi
 
 if [ ! -f $VMAIL_DIR/authdb.sqlite ]; then
+    chown $VMAIL_USER:$VMAIL_GROUP $VMAIL_DIR
+    chmod 770 $VMAIL_DIR
     /usr/local/vimbadmin/bin/doctrine-cli.php create-tables
     chown $VMAIL_USER:$VMAIL_GROUP $VMAIL_DIR/authdb.sqlite
     chmod 660 $VMAIL_DIR/authdb.sqlite

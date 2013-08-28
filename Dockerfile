@@ -6,6 +6,7 @@ MAINTAINER Nicolas Cadou <ncadou@cadou.ca>
 
 ENV DEBIAN_FRONTEND noninteractive
 
+ENV RANDOMIZE_PASSWORD 0
 ENV VMAIL_USER vmail
 ENV VMAIL_UID 150
 ENV VMAIL_GROUP mail
@@ -15,8 +16,6 @@ ENV VMAIL_DIR /var/vmail
 RUN apt-get install -y bcrypt dovecot-imapd dovecot-managesieved dovecot-pop3d dovecot-sieve dovecot-sqlite logrotate mail-server^ openssh-server postfix postgrey && apt-get clean
 
 RUN mkdir /var/run/sshd
-# Temporarily during development:
-RUN echo root:root | chpasswd
 
 RUN apt-get install -y curl git subversion nginx php5-cli php5-fpm php5-sqlite && apt-get clean
 
