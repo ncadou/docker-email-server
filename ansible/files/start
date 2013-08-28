@@ -14,8 +14,12 @@ if [ ! -f $VMAIL_DIR/authdb.sqlite ]; then
     chmod 660 $VMAIL_DIR/authdb.sqlite
 fi
 
+echo "127.0.0.1 $(hostname) $(hostname -s)" >> /etc/hosts
+
 /usr/sbin/dovecot -c /etc/dovecot/dovecot.conf
 service php5-fpm start
 service nginx start
 
+# The SSH init that we'll not be using would've created that directory.
+test -d /var/run/sshd || mkdir -p -m0755 /var/run/sshd
 exec /usr/sbin/sshd -D
