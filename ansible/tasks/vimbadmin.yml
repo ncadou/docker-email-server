@@ -26,7 +26,7 @@
 - name: Configure ViMbAdmin security salt
   lineinfile: dest=/usr/local/vimbadmin/application/configs/application.ini
               regexp='^.*(securitysalt).*$' backrefs=yes
-              line="\1 = \"123\""
+              line="\1 = \"${vimbadmin_salt}\""
               state=present
   tags:
     - vimbadmin
