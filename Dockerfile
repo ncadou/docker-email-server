@@ -29,7 +29,7 @@ ENV VIMBADMIN_VER 2.2.2
 ENV VIMBADMIN_HOSTNAME mailserver.local
 
 RUN bash -c 'debconf-set-selections <<< "postfix postfix/mailname string $MAILNAME"'
-RUN apt-get install -y bcrypt curl dovecot-imapd dovecot-managesieved dovecot-pop3d dovecot-sieve dovecot-sqlite git logrotate mail-server^ nginx openssh-server php5-cli php5-fpm php5-sqlite postfix postgrey pwgen rsyslog subversion && apt-get clean
+RUN apt-get install -y --no-install-recommends bcrypt bsd-mailx curl dovecot-core dovecot-imapd dovecot-managesieved dovecot-pop3d dovecot-sieve dovecot-sqlite git libgpgme11 libpth20 libpython-stdlib libpython2.7-minimal libpython2.7-stdlib libtokyocabinet9 logrotate mutt nginx openssh-server php5-cli php5-fpm php5-sqlite postfix postgrey procmail pwgen python python-minimal python2.7 python2.7-minimal rsyslog ssl-cert subversion && apt-get clean
 
 ADD ansible /.ansible
 RUN cd /.ansible; ansible-playbook -i hosts -c local setup-base.yml -e "mailname=$MAILNAME vmail_user=$VMAIL_USER vmail_uid=$VMAIL_UID vmail_group=$VMAIL_GROUP vmail_gid=$VMAIL_GID vmail_dir=$VMAIL_DIR vimbadmin_ver=$VIMBADMIN_VER vimbadmin_salt=$VIMBADMIN_SALT vimbadmin_hostname=$VIMBADMIN_HOSTNAME"

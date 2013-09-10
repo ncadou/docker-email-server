@@ -7,15 +7,23 @@
   apt: pkg=${item} state=installed
   with_items:
     - bcrypt
+    - bsd-mailx
     - curl
+    - dovecot-core
     - dovecot-imapd
     - dovecot-managesieved
     - dovecot-pop3d
     - dovecot-sieve
     - dovecot-sqlite
     - git
+    - libgpgme11
+    - libpth20
+    - libpython-stdlib
+    - libpython2.7-minimal
+    - libpython2.7-stdlib
+    - libtokyocabinet9
     - logrotate
-    # - mail-server^  # Ansible fails on that one.
+    - mutt
     - nginx
     - openssh-server
     - php5-cli
@@ -23,6 +31,12 @@
     - php5-sqlite
     - postfix
     - postgrey
+    - procmail
     - pwgen
+    - python
+    - python-minimal
+    - python2.7
+    - python2.7-minimal
     - rsyslog
+    - ssl-cert
     - subversion
