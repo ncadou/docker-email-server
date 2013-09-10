@@ -117,7 +117,7 @@ disable_vrfy_command = yes
 # General host and delivery info
 # ----------------------------------
 
-myhostname = mail.example.com
+myhostname = ${mailname}
 myorigin = /etc/hostname
 # Some people see issues when setting mydestination explicitly to the server
 # subdomain, while leaving it empty generally doesn't hurt. So it is left empty here.
@@ -136,14 +136,14 @@ mynetworks_style = host
 virtual_mailbox_base = ${vmail_dir}
 # This is for the mailbox location for each user. The domainaliases
 # map allows us to make use of Postfix Admin's domain alias feature.
-virtual_mailbox_maps = ${db_backend}:/etc/postfix/sql-virtual-mailbox-maps.cf, ${db_backend}:/etc/postfix/sql-virtual-mailbox-domainaliases-maps.cf
+virtual_mailbox_maps = ${db_backend}:/etc/postfix/sql-virtual-mailbox-maps.cf
 # and their user id
 virtual_uid_maps = static:${vmail_uid}
 # and group id
 virtual_gid_maps = static:${vmail_gid}
 # This is for aliases. The domainaliases map allows us to make
 # use of Postfix Admin's domain alias feature.
-virtual_alias_maps = ${db_backend}:/etc/postfix/sql-virtual-alias-maps.cf, ${db_backend}:/etc/postfix/sql-virtual-alias-domainaliases-maps.cf
+virtual_alias_maps = ${db_backend}:/etc/postfix/sql-virtual-alias-maps.cf
 # This is for domain lookups.
 virtual_mailbox_domains = ${db_backend}:/etc/postfix/sql-virtual-domains-maps.cf
 
@@ -163,4 +163,4 @@ content_filter = amavis:[127.0.0.1]:10024
 # Getting rid of unwanted headers. See: https://posluns.com/guides/header-removal/
 header_checks = regexp:/etc/postfix/header_checks
 # getting rid of x-original-to
-enable_original_recipient = no:
+enable_original_recipient = no

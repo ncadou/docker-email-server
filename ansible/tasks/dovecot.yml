@@ -1,5 +1,12 @@
-- name: Install SQL auth dovecot configuration file
-  copy: src=templates/dovecot/auth-sql.conf.ext dest=/etc/dovecot/conf.d
+- name: Install dovecot configuration files
+  copy: src=dovecot/${item} dest=/etc/dovecot/conf.d
+  with_items:
+    - auth-sql.conf.ext
+
+- name: Install dovecot configuration templates
+  template: src=dovecot/${item} dest=/etc/dovecot/conf.d
+  with_items:
+    - 11-master.conf
 
 - name: Set dovecot driver for SQL auth to sqlite
   lineinfile: dest=/etc/dovecot/dovecot-sql.conf.ext regexp='driver\s*='

@@ -1,7 +1,7 @@
 - name: Preconfigure postfix
   shell: bash -c 'debconf-set-selections <<< "postfix postfix/${item.key} string ${item.value}"'
   with_items:
-    - {'key': 'mailname', 'value': $mailname}
+    - {key: 'mailname', value: $mailname}
 
 - name: Install essential packages
   apt: pkg=${item} state=installed
