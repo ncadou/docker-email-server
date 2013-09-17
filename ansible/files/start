@@ -24,6 +24,12 @@ echo "127.0.0.1 $(hostname) $(hostname -s)" >> /etc/hosts
 /usr/sbin/dovecot -c /etc/dovecot/dovecot.conf
 service postfix start
 
+# Start email filtering services.
+service amavis start
+service clamav-daemon start
+service postgrey start
+service spamassassin start
+
 # Start web services.
 service php5-fpm start
 service nginx start
