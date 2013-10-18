@@ -20,6 +20,9 @@ echo "127.0.0.1 $(hostname) $(hostname -s)" >> /etc/hosts
 . /etc/default/rsyslog
 /usr/sbin/rsyslogd $RSYSLOGD_OPTIONS
 
+# Update ClamAV
+/usr/bin/freshclam &
+
 # Start email services.
 /usr/sbin/dovecot -c /etc/dovecot/dovecot.conf
 service postfix start

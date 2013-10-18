@@ -51,6 +51,8 @@ RUN apt-get install -y --no-install-recommends \
         htop less moreutils tree telnet net-tools psmisc sqlite3 vim-nox \
     && apt-get clean
 
+RUN freshclam
+
 ADD ansible /.ansible
 RUN /.ansible/setup-base.sh
 
