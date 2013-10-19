@@ -14,7 +14,9 @@ if [ ! -f $VMAIL_DIR/authdb.sqlite ]; then
     chmod 660 $VMAIL_DIR/authdb.sqlite
 fi
 
+{% if configure_hostname is defined %}
 echo "127.0.0.1 $(hostname) $(hostname -s)" >> /etc/hosts
+{% endif %}
 
 # Start system services.
 . /etc/default/rsyslog

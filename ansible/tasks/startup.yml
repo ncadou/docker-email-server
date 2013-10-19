@@ -1,2 +1,2 @@
 - name: Install startup script
-  copy: src=files/start dest=/start mode=755
+  template: src=templates/start dest=/start mode=755
