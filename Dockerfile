@@ -1,7 +1,7 @@
 # Dockerfile for an email server with postfix and dovecot.
 #
 
-FROM dsissitka/raring
+FROM dsissitka/ubunturaring
 MAINTAINER Nicolas Cadou <ncadou@cadou.ca>
 
 ENV DEBIAN_FRONTEND noninteractive
