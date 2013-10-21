@@ -14,6 +14,17 @@ if [ ! -f $VMAIL_DIR/authdb.sqlite ]; then
     chmod 660 $VMAIL_DIR/authdb.sqlite
 fi
 
+if [ ! -f /var/lib/clamav/main.cvd ]; then
+    chown clamav:clamav /var/lib/clamav
+    chmod 770 /var/lib/clamav
+fi
+
+if [ ! -d /var/log/clamav ]; then
+    mkdir /var/log/clamav
+    chown clamav:clamav /var/log/clamav
+    chmod 770 /var/log/clamav
+fi
+
 {% if configure_hostname is defined %}
 echo "127.0.0.1 $(hostname) $(hostname -s)" >> /etc/hosts
 {% endif %}
